@@ -1,0 +1,14 @@
+const express = require('express');
+const router = express.Router();
+const { protect, fanOnly } = require('../middleware/authMiddleware');
+const { getUpcomingMatches, getMatchDetails, getMatchHistory, bookTicket, getMyTickets, cancelTicket, getAllResults, getTopScorers } = require('../controllers/fanController');
+router.use(protect, fanOnly);
+router.get('/matches/upcoming', getUpcomingMatches);
+router.get('/matches/history', getMatchHistory);
+router.get('/results', getAllResults);
+router.get('/top-scorers', getTopScorers);
+router.get('/matches/:id', getMatchDetails);
+router.post('/tickets', bookTicket);
+router.get('/tickets', getMyTickets);
+router.delete('/tickets/:id', cancelTicket);
+module.exports = router;

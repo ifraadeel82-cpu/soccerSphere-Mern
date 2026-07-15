@@ -1,0 +1,12 @@
+const express = require('express');
+const router = express.Router();
+const { protect, adminOnly } = require('../middleware/authMiddleware');
+const { getPopularMatches, getMostActiveFans, getTopScorers, getTrainingAttendance, getMatchRevenue, getOverview } = require('../controllers/analyticsController');
+router.use(protect, adminOnly);
+router.get('/overview', getOverview);
+router.get('/popular-matches', getPopularMatches);
+router.get('/most-active-fans', getMostActiveFans);
+router.get('/top-scorers', getTopScorers);
+router.get('/training-attendance', getTrainingAttendance);
+router.get('/match-revenue', getMatchRevenue);
+module.exports = router;

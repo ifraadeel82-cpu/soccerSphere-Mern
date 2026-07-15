@@ -1,0 +1,14 @@
+const express = require('express');
+const router = express.Router();
+const { protect, adminOnly } = require('../middleware/authMiddleware');
+const { getWCUpcomingMatches, getWCMatches, getWCMatchById, getWCTeams, getWCTopScorers, getWCStandings, createWCMatch, updateWCMatch, createWCTeam } = require('../controllers/worldcupController');
+router.get('/matches/upcoming', getWCUpcomingMatches);
+router.get('/matches', getWCMatches);
+router.get('/matches/:id', getWCMatchById);
+router.get('/teams', getWCTeams);
+router.get('/players/top-scorers', getWCTopScorers);
+router.get('/standings', getWCStandings);
+router.post('/matches', protect, adminOnly, createWCMatch);
+router.put('/matches/:id', protect, adminOnly, updateWCMatch);
+router.post('/teams', protect, adminOnly, createWCTeam);
+module.exports = router;
