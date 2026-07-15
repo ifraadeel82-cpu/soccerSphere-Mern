@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import api from '../../api';
 
 const LandingPage = () => {
   const navigate = useNavigate();
@@ -35,11 +35,11 @@ const LandingPage = () => {
 
   // Fetch data
   useEffect(() => {
-    axios
+    api
       .get('/api/worldcup/matches/upcoming')
       .then(r => setWcMatches(r.data.slice(0, 3)))
       .catch(() => {});
-    axios
+    api
       .get('/api/worldcup/players/top-scorers')
       .then(r => setTopScorers(r.data.slice(0, 5)))
       .catch(() => {});

@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import api from '../../api';
 
 const Results = () => {
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axios.get('/api/fan/results').then(r => setResults(r.data)).finally(() => setLoading(false));
+    api.get('/api/fan/results').then(r => setResults(r.data)).finally(() => setLoading(false));
   }, []);
 
   const fmt = d => new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });

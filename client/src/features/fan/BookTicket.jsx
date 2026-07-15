@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import api from '../../api';
 
 const BookTicket = () => {
   const { matchId } = useParams();
@@ -12,7 +12,7 @@ const BookTicket = () => {
   const [success, setSuccess] = useState('');
 
   useEffect(() => {
-    axios.get('/api/fan/matches/' + matchId).then(r => setMatch(r.data)).catch(() => {});
+    api.get('/api/fan/matches/' + matchId).then(r => setMatch(r.data)).catch(() => {});
   }, [matchId]);
 
   const handle = e => setForm(p => ({ ...p, [e.target.name]: e.target.value }));
@@ -20,7 +20,7 @@ const BookTicket = () => {
   const submit = async e => {
     e.preventDefault(); setError(''); setLoading(true);
     try {
-      await axios.post('/api/fan/tickets', { matchId, ...form });
+      await api.post('/api/fan/tickets', { matchId, ...form });
       setSuccess('Ticket booked successfully! Redirecting...');
       setTimeout(() => navigate('/fan/tickets'), 1500);
     } catch (err) {

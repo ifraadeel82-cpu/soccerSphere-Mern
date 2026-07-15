@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import api from '../../api';
 const MatchDetails = () => {
   const { id } = useParams(); const navigate = useNavigate();
   const [match, setMatch] = useState(null); const [loading, setLoading] = useState(true);
   useEffect(()=>{
-    axios.get(`/api/fan/matches/${id}`).then(r=>setMatch(r.data))
-      .catch(()=>axios.get(`/api/worldcup/matches/${id}`).then(r=>setMatch(r.data)))
+    api.get(`/api/fan/matches/${id}`).then(r=>setMatch(r.data))
+      .catch(()=>api.get(`/api/worldcup/matches/${id}`).then(r=>setMatch(r.data)))
       .finally(()=>setLoading(false));
   },[id]);
   if(loading) return <div style={{color:'#A9A9A9',padding:40}}>Loading...</div>;

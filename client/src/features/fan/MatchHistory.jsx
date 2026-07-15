@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import api from '../../api';
 const MatchHistory = () => {
   const [history, setHistory] = useState([]); const [loading, setLoading] = useState(true);
-  useEffect(()=>{ axios.get('/api/fan/matches/history').then(r=>setHistory(r.data)).finally(()=>setLoading(false)); },[]);
+  useEffect(()=>{ api.get('/api/fan/matches/history').then(r=>setHistory(r.data)).finally(()=>setLoading(false)); },[]);
   const fmt = d => new Date(d).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
   if(loading) return <div style={{color:'#A9A9A9',padding:40}}>Loading history...</div>;
   return (

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import Sidebar from '../../components/layout/Sidebar';
 import StatCard from '../../components/ui/StatCard';
-import axios from 'axios';
+import api from '../../api';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 
 const links = [
@@ -26,9 +26,9 @@ const TT = { contentStyle:{background:'#1C1C1C',border:'1px solid #2a2a2a',borde
 const Overview = () => {
   const [stats,setStats]=useState(null); const [revenue,setRevenue]=useState([]); const [scorers,setScorers]=useState([]);
   useEffect(()=>{
-    axios.get('/api/analytics/overview').then(r=>setStats(r.data));
-    axios.get('/api/analytics/match-revenue').then(r=>setRevenue(r.data.slice(0,6)));
-    axios.get('/api/analytics/top-scorers').then(r=>setScorers(r.data.slice(0,5)));
+    api.get('/api/analytics/overview').then(r=>setStats(r.data));
+    api.get('/api/analytics/match-revenue').then(r=>setRevenue(r.data.slice(0,6)));
+    api.get('/api/analytics/top-scorers').then(r=>setScorers(r.data.slice(0,5)));
   },[]);
   return (
     <div>

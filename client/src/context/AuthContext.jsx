@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../api';
 const AuthContext = createContext(null);
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -8,7 +8,7 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     if (token) {
       axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
-      axios.get('/api/auth/me').then(res => setUser(res.data)).catch(() => logout()).finally(() => setLoading(false));
+      api.get('/api/auth/me').then(res => setUser(res.data)).catch(() => logout()).finally(() => setLoading(false));
     } else { setLoading(false); }
   }, [token]);
   const login = (tokenVal, userData) => {

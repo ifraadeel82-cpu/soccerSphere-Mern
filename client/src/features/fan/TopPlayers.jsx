@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import api from '../../api';
 
 const TopPlayers = () => {
   const [scorers, setScorers] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axios.get('/api/fan/top-scorers').then(r => setScorers(r.data)).finally(() => setLoading(false));
+    api.get('/api/fan/top-scorers').then(r => setScorers(r.data)).finally(() => setLoading(false));
   }, []);
 
   if (loading) return <div style={{ color: '#A9A9A9', padding: 40 }}>Loading player stats...</div>;

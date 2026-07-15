@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import axios from 'axios';
+import api from '../../api';
 import { useAuth } from '../../context/AuthContext';
 const Register = () => {
   const navigate = useNavigate(); const { login } = useAuth();
@@ -13,7 +13,7 @@ const Register = () => {
     if(form.password.length<6) return setError('Password must be at least 6 characters');
     setLoading(true);
     try {
-      const res = await axios.post('/api/auth/register',{username:form.username,password:form.password,name:form.name,contact:form.contact,address:form.address});
+      const res = await api.post('/api/auth/register',{username:form.username,password:form.password,name:form.name,contact:form.contact,address:form.address});
       login(res.data.token,res.data.user); navigate('/fan');
     } catch(err) { setError(err.response?.data?.message||'Registration failed'); }
     finally { setLoading(false); }

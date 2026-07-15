@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import api from '../../api';
 import MatchCard from '../../components/ui/MatchCard';
 const UpcomingMatches = () => {
   const [matches, setMatches] = useState([]); const [wc, setWc] = useState([]);
   const [loading, setLoading] = useState(true); const [tab, setTab] = useState('all');
   useEffect(()=>{
-    Promise.all([axios.get('/api/fan/matches/upcoming'),axios.get('/api/worldcup/matches/upcoming')])
+    Promise.all([api.get('/api/fan/matches/upcoming'),api.get('/api/worldcup/matches/upcoming')])
       .then(([r1,r2])=>{setMatches(r1.data);setWc(r2.data);}).finally(()=>setLoading(false));
   },[]);
   const display = tab==='wc'?wc:matches;

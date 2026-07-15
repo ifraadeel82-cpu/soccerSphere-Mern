@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import api from '../../api';
 const MyTickets = () => {
   const [tickets, setTickets] = useState([]); const [loading, setLoading] = useState(true); const [cancelling, setCancelling] = useState(null);
-  const load = () => axios.get('/api/fan/tickets').then(r=>setTickets(r.data)).finally(()=>setLoading(false));
+  const load = () => api.get('/api/fan/tickets').then(r=>setTickets(r.data)).finally(()=>setLoading(false));
   useEffect(()=>{load();},[]);
   const cancel = async id => {
     if(!window.confirm('Cancel this ticket? Payment will be refunded.')) return;
     setCancelling(id);
-    try { await axios.delete(`/api/fan/tickets/${id}`); load(); }
+    try { await api.delete(`/api/fan/tickets/${id}`); load(); }
     catch(err) { alert(err.response?.data?.message||'Cancel failed'); }
     finally { setCancelling(null); }
   };
