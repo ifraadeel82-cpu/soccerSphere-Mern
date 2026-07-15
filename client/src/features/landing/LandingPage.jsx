@@ -571,24 +571,24 @@ const LandingPage = () => {
           </div>
 
           <h1
-            style={{
-              fontSize: 'clamp(40px,5.6vw,68px)',
-              fontWeight: 900,
-              lineHeight: 1,
-              letterSpacing: '-0.06em',
-              marginBottom: 10,
-            }}
-          >
-            Your{' '}
-            <span
-              style={{
-                color: C.mainAccent,
-              }}
-            >
-              matchday
-            </span>{' '}
-            looks like an EA menu now.
-          </h1>
+  style={{
+    fontSize: 'clamp(40px,5.6vw,68px)',
+    fontWeight: 900,
+    lineHeight: 1,
+    letterSpacing: '-0.06em',
+    marginBottom: 10,
+  }}
+>
+  Own the{' '}
+  <span
+    style={{
+      color: C.mainAccent,
+    }}
+  >
+    World Cup
+  </span>{' '}
+  from your dashboard.
+</h1>
 
           <p
             style={{
