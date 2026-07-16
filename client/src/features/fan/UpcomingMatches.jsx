@@ -11,7 +11,7 @@ const UpcomingMatches = () => {
       .then(([r1,r2])=>{setMatches(r1.data);setWc(r2.data);}).finally(()=>setLoading(false));
   },[]);
   const display = tab==='wc'?wc:matches;
-  if(loading) return <div style={{color:'#A9A9A9',padding:40}}>Loading matches...</div>;
+  if(loading) return <div style={{color:'#B0AEAF',padding:40}}>Loading matches...</div>;
   return (
     <div>
       <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:24}}>
@@ -21,7 +21,7 @@ const UpcomingMatches = () => {
         </div>
       </div>
       {display.length===0
-        ?<div className="card" style={{textAlign:'center',color:'#A9A9A9',padding:60}}>No upcoming matches found.</div>
+        ?<div className="card" style={{textAlign:'center',color:'#B0AEAF',padding:60}}>No upcoming matches found.</div>
         :<div style={{display:'grid',gap:20}}>{display.map(m=><MatchCard key={m._id} match={m} showBookBtn basePath="/fan"/>)}</div>}
     </div>
   );
