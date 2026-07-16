@@ -70,11 +70,11 @@ api.get('/api/analytics/top-scorers')
 const Matches = () => {
   const [matches,setMatches]=useState([]); const [teams,setTeams]=useState([]); const [stadiums,setStadiums]=useState([]);
   const [form,setForm]=useState({homeTeam:'',awayTeam:'',stadium:'',matchDate:'',ticketPrice:'',totalSeats:''}); const [err,setErr]=useState('');
-  const load=()=>{api.get('/api/admin/matches').then(r=>setMatches(r.data));axios.get('/api/admin/teams').then(r=>setTeams(r.data));axios.get('/api/admin/stadiums').then(r=>setStadiums(r.data));};
+  const load=()=>{api.get('/api/admin/matches').then(r=>setMatches(r.data));api.get('/api/admin/teams').then(r=>setTeams(r.data));api.get('/api/admin/stadiums').then(r=>setStadiums(r.data));};
   useEffect(()=>{load();},[]);
-  const schedule=async e=>{e.preventDefault();setErr('');try{await axios.post('/api/admin/matches',form);load();setForm({homeTeam:'',awayTeam:'',stadium:'',matchDate:'',ticketPrice:'',totalSeats:''});}catch(e){setErr(e.response?.data?.message||'Failed');}};
-  const finalize=async id=>{const hs=prompt('Home score:');const as=prompt('Away score:');if(hs===null||as===null)return;try{await axios.patch(`/api/admin/matches/${id}/finalize`,{homeScore:+hs,awayScore:+as});load();}catch(e){alert(e.response?.data?.message||'Failed');}};
-  const cancel=async id=>{if(!window.confirm('Cancel match?'))return;await axios.patch(`/api/admin/matches/${id}/cancel`);load();};
+  const schedule=async e=>{e.preventDefault();setErr('');try{await api.post('/api/admin/matches',form);load();setForm({homeTeam:'',awayTeam:'',stadium:'',matchDate:'',ticketPrice:'',totalSeats:''});}catch(e){setErr(e.response?.data?.message||'Failed');}};
+  const finalize=async id=>{const hs=prompt('Home score:');const as=prompt('Away score:');if(hs===null||as===null)return;try{await api.patch(`/api/admin/matches/${id}/finalize`,{homeScore:+hs,awayScore:+as});load();}catch(e){alert(e.response?.data?.message||'Failed');}};
+  const cancel=async id=>{if(!window.confirm('Cancel match?'))return;await api.patch(`/api/admin/matches/${id}/cancel`);load();};
   const fmt=d=>new Date(d).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
   return (
     <div>
@@ -116,10 +116,10 @@ const Matches = () => {
 
 const Teams = () => {
   const [teams,setTeams]=useState([]); const [form,setForm]=useState({name:'',country:'',founded:''});
-  const load=()=>axios.get('/api/admin/teams').then(r=>setTeams(r.data));
+  const load=()=>api.get('/api/admin/teams').then(r=>setTeams(r.data));
   useEffect(()=>{load();},[]);
-  const add=async e=>{e.preventDefault();await axios.post('/api/admin/teams',form);load();setForm({name:'',country:'',founded:''});};
-  const deactivate=async id=>{if(!window.confirm('Deactivate?'))return;await axios.patch(`/api/admin/teams/${id}/deactivate`);load();};
+  const add=async e=>{e.preventDefault();await api.post('/api/admin/teams',form);load();setForm({name:'',country:'',founded:''});};
+  const deactivate=async id=>{if(!window.confirm('Deactivate?'))return;await api.patch(`/api/admin/teams/${id}/deactivate`);load();};
   return (
     <div>
       <h1 className="page-title">Team Management</h1>
@@ -147,10 +147,10 @@ const Teams = () => {
 const Players = () => {
   const [players,setPlayers]=useState([]); const [teams,setTeams]=useState([]);
   const [form,setForm]=useState({name:'',team:'',position:'Forward',nationality:'',jerseyNumber:''});
-  const load=()=>{axios.get('/api/admin/players').then(r=>setPlayers(r.data));axios.get('/api/admin/teams').then(r=>setTeams(r.data));};
+  const load=()=>{api.get('/api/admin/players').then(r=>setPlayers(r.data));api.get('/api/admin/teams').then(r=>setTeams(r.data));};
   useEffect(()=>{load();},[]);
-  const add=async e=>{e.preventDefault();await axios.post('/api/admin/players',form);load();setForm({name:'',team:'',position:'Forward',nationality:'',jerseyNumber:''});};
-  const transfer=async id=>{const tid=prompt('New team ID:');if(!tid)return;await axios.patch(`/api/admin/players/${id}/transfer`,{newTeamId:tid});load();};
+  const add=async e=>{e.preventDefault();await api.post('/api/admin/players',form);load();setForm({name:'',team:'',position:'Forward',nationality:'',jerseyNumber:''});};
+  const transfer=async id=>{const tid=prompt('New team ID:');if(!tid)return;await api.patch(`/api/admin/players/${id}/transfer`,{newTeamId:tid});load();};
   return (
     <div>
       <h1 className="page-title">Player Management</h1>
@@ -181,9 +181,9 @@ const Players = () => {
 
 const Fans = () => {
   const [fans,setFans]=useState([]);
-  const load=()=>axios.get('/api/admin/fans').then(r=>setFans(r.data));
+  const load=()=>api.get('/api/admin/fans').then(r=>setFans(r.data));
   useEffect(()=>{load();},[]);
-  const deactivate=async id=>{if(!window.confirm('Deactivate fan?'))return;await axios.patch(`/api/admin/fans/${id}/deactivate`);load();};
+  const deactivate=async id=>{if(!window.confirm('Deactivate fan?'))return;await api.patch(`/api/admin/fans/${id}/deactivate`);load();};
   return (
     <div>
       <h1 className="page-title">Fan Management</h1>
@@ -203,9 +203,9 @@ const Fans = () => {
 const Training = () => {
   const [sessions,setSessions]=useState([]); const [teams,setTeams]=useState([]);
   const [form,setForm]=useState({title:'',team:'',scheduledDate:'',durationMinutes:90,location:''});
-  const load=()=>{axios.get('/api/admin/training').then(r=>setSessions(r.data));axios.get('/api/admin/teams').then(r=>setTeams(r.data));};
+  const load=()=>{api.get('/api/admin/training').then(r=>setSessions(r.data));api.get('/api/admin/teams').then(r=>setTeams(r.data));};
   useEffect(()=>{load();},[]);
-  const add=async e=>{e.preventDefault();await axios.post('/api/admin/training',form);load();setForm({title:'',team:'',scheduledDate:'',durationMinutes:90,location:''});};
+  const add=async e=>{e.preventDefault();await api.post('/api/admin/training',form);load();setForm({title:'',team:'',scheduledDate:'',durationMinutes:90,location:''});};
   return (
     <div>
       <h1 className="page-title">Training Sessions</h1>
@@ -236,9 +236,9 @@ const Training = () => {
 const Staff = () => {
   const [staff,setStaff]=useState([]); const [teams,setTeams]=useState([]);
   const [form,setForm]=useState({name:'',category:'',team:'',contact:''});
-  const load=()=>{axios.get('/api/admin/staff').then(r=>setStaff(r.data));axios.get('/api/admin/teams').then(r=>setTeams(r.data));};
+  const load=()=>{api.get('/api/admin/staff').then(r=>setStaff(r.data));api.get('/api/admin/teams').then(r=>setTeams(r.data));};
   useEffect(()=>{load();},[]);
-  const add=async e=>{e.preventDefault();await axios.post('/api/admin/staff',form);load();setForm({name:'',category:'',team:'',contact:''});};
+  const add=async e=>{e.preventDefault();await api.post('/api/admin/staff',form);load();setForm({name:'',category:'',team:'',contact:''});};
   return (
     <div>
       <h1 className="page-title">Staff Management</h1>
@@ -262,9 +262,9 @@ const Staff = () => {
 const Supplies = () => {
   const [supplies,setSupplies]=useState([]);
   const [form,setForm]=useState({name:'',category:'',quantity:'',unit:'units',lowStockThreshold:10});
-  const load=()=>axios.get('/api/admin/supplies').then(r=>setSupplies(r.data));
+  const load=()=>api.get('/api/admin/supplies').then(r=>setSupplies(r.data));
   useEffect(()=>{load();},[]);
-  const add=async e=>{e.preventDefault();await axios.post('/api/admin/supplies',form);load();setForm({name:'',category:'',quantity:'',unit:'units',lowStockThreshold:10});};
+  const add=async e=>{e.preventDefault();await api.post('/api/admin/supplies',form);load();setForm({name:'',category:'',quantity:'',unit:'units',lowStockThreshold:10});};
   return (
     <div>
       <h1 className="page-title">Supplies Management</h1>
@@ -295,9 +295,9 @@ const Supplies = () => {
 
 const Sponsors = () => {
   const [sponsors,setSponsors]=useState([]); const [form,setForm]=useState({name:'',industry:'',contactEmail:''});
-  const load=()=>axios.get('/api/admin/sponsors').then(r=>setSponsors(r.data));
+  const load=()=>api.get('/api/admin/sponsors').then(r=>setSponsors(r.data));
   useEffect(()=>{load();},[]);
-  const add=async e=>{e.preventDefault();await axios.post('/api/admin/sponsors',form);load();setForm({name:'',industry:'',contactEmail:''});};
+  const add=async e=>{e.preventDefault();await api.post('/api/admin/sponsors',form);load();setForm({name:'',industry:'',contactEmail:''});};
   return (
     <div>
       <h1 className="page-title">Sponsor Management</h1>
@@ -319,9 +319,9 @@ const Sponsors = () => {
 
 const Stadiums = () => {
   const [stadiums,setStadiums]=useState([]); const [form,setForm]=useState({name:'',location:'',capacity:'',surface:'Grass'});
-  const load=()=>axios.get('/api/admin/stadiums').then(r=>setStadiums(r.data));
+  const load=()=>api.get('/api/admin/stadiums').then(r=>setStadiums(r.data));
   useEffect(()=>{load();},[]);
-  const add=async e=>{e.preventDefault();await axios.post('/api/admin/stadiums',form);load();setForm({name:'',location:'',capacity:'',surface:'Grass'});};
+  const add=async e=>{e.preventDefault();await api.post('/api/admin/stadiums',form);load();setForm({name:'',location:'',capacity:'',surface:'Grass'});};
   return (
     <div>
       <h1 className="page-title">Stadium Management</h1>
@@ -345,10 +345,10 @@ const Stadiums = () => {
 const WorldCupAdmin = () => {
   const [matches,setMatches]=useState([]); const [teams,setTeams]=useState([]); const [stadiums,setStadiums]=useState([]);
   const [form,setForm]=useState({homeTeam:'',awayTeam:'',stadium:'',matchDate:'',ticketPrice:'',totalSeats:''});
-  const load=()=>{axios.get('/api/worldcup/matches').then(r=>setMatches(r.data));axios.get('/api/worldcup/teams').then(r=>setTeams(r.data));axios.get('/api/admin/stadiums').then(r=>setStadiums(r.data));};
+  const load=()=>{api.get('/api/worldcup/matches').then(r=>setMatches(r.data));api.get('/api/worldcup/teams').then(r=>setTeams(r.data));api.get('/api/admin/stadiums').then(r=>setStadiums(r.data));};
   useEffect(()=>{load();},[]);
-  const add=async e=>{e.preventDefault();await axios.post('/api/worldcup/matches',form);load();};
-  const finalize=async id=>{const hs=prompt('Home score:');const as=prompt('Away score:');if(hs===null||as===null)return;await axios.put(`/api/worldcup/matches/${id}`,{homeScore:+hs,awayScore:+as,status:'Completed'});load();};
+  const add=async e=>{e.preventDefault();await api.post('/api/worldcup/matches',form);load();};
+  const finalize=async id=>{const hs=prompt('Home score:');const as=prompt('Away score:');if(hs===null||as===null)return;await api.put(`/api/worldcup/matches/${id}`,{homeScore:+hs,awayScore:+as,status:'Completed'});load();};
   return (
     <div>
       <h1 className="page-title">🌍 World Cup 2026 Management</h1>
@@ -382,10 +382,10 @@ const WorldCupAdmin = () => {
 const Analytics = () => {
   const [popular,setPopular]=useState([]); const [fans,setFans]=useState([]); const [scorers,setScorers]=useState([]); const [attendance,setAttendance]=useState([]);
   useEffect(()=>{
-    axios.get('/api/analytics/popular-matches').then(r=>setPopular(r.data));
-    axios.get('/api/analytics/most-active-fans').then(r=>setFans(r.data));
-    axios.get('/api/analytics/top-scorers').then(r=>setScorers(r.data));
-    axios.get('/api/analytics/training-attendance').then(r=>setAttendance(r.data));
+    api.get('/api/analytics/popular-matches').then(r=>setPopular(r.data));
+    api.get('/api/analytics/most-active-fans').then(r=>setFans(r.data));
+    api.get('/api/analytics/top-scorers').then(r=>setScorers(r.data));
+    api.get('/api/analytics/training-attendance').then(r=>setAttendance(r.data));
   },[]);
   return (
     <div>
