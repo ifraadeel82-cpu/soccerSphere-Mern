@@ -15,7 +15,24 @@ const app = express();
 // be served stale from browser cache (was causing 304 responses with old data)
 app.set('etag', false);
 
-app.use(cors({ origin: 'http://localhost:5173', credentials: true }));
+// Allow both local dev and the deployed Railway frontend to call this API.
+const allowedOrigins = [
+  'http://localhost:5173',
+  'https://generous-expression-production-8758.up.railway.app',
+];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    // allow requests with no origin (like curl, Postman, server-to-server)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    return callback(new Error('Not allowed by CORS: ' + origin));
+  },
+  credentials: true,
+}));
+
 app.use(express.json());
 app.use(morgan('dev'));
 
