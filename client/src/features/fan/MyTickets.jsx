@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import api from '../../api';
+import axios from 'axios';
+
 const MyTickets = () => {
   const [tickets, setTickets] = useState([]); const [loading, setLoading] = useState(true); const [cancelling, setCancelling] = useState(null);
   const load = () => api.get('/api/fan/tickets').then(r=>setTickets(r.data)).finally(()=>setLoading(false));

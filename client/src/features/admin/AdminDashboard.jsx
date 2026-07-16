@@ -26,9 +26,14 @@ const TT = { contentStyle:{background:'#1C1C1C',border:'1px solid #2a2a2a',borde
 const Overview = () => {
   const [stats,setStats]=useState(null); const [revenue,setRevenue]=useState([]); const [scorers,setScorers]=useState([]);
   useEffect(()=>{
-    api.get('/api/analytics/overview').then(r=>setStats(r.data));
-    api.get('/api/analytics/match-revenue').then(r=>setRevenue(r.data.slice(0,6)));
-    api.get('/api/analytics/top-scorers').then(r=>setScorers(r.data.slice(0,5)));
+    api.get('/api/analytics/overview')
+  .then(r => setStats(r.data));
+
+api.get('/api/analytics/match-revenue')
+  .then(r => setRevenue(Array.isArray(r.data) ? r.data.slice(0,6) : []));
+
+api.get('/api/analytics/top-scorers')
+  .then(r => setScorers(Array.isArray(r.data) ? r.data.slice(0,5) : []));
   },[]);
   return (
     <div>
@@ -65,7 +70,7 @@ const Overview = () => {
 const Matches = () => {
   const [matches,setMatches]=useState([]); const [teams,setTeams]=useState([]); const [stadiums,setStadiums]=useState([]);
   const [form,setForm]=useState({homeTeam:'',awayTeam:'',stadium:'',matchDate:'',ticketPrice:'',totalSeats:''}); const [err,setErr]=useState('');
-  const load=()=>{axios.get('/api/admin/matches').then(r=>setMatches(r.data));axios.get('/api/admin/teams').then(r=>setTeams(r.data));axios.get('/api/admin/stadiums').then(r=>setStadiums(r.data));};
+  const load=()=>{api.get('/api/admin/matches').then(r=>setMatches(r.data));axios.get('/api/admin/teams').then(r=>setTeams(r.data));axios.get('/api/admin/stadiums').then(r=>setStadiums(r.data));};
   useEffect(()=>{load();},[]);
   const schedule=async e=>{e.preventDefault();setErr('');try{await axios.post('/api/admin/matches',form);load();setForm({homeTeam:'',awayTeam:'',stadium:'',matchDate:'',ticketPrice:'',totalSeats:''});}catch(e){setErr(e.response?.data?.message||'Failed');}};
   const finalize=async id=>{const hs=prompt('Home score:');const as=prompt('Away score:');if(hs===null||as===null)return;try{await axios.patch(`/api/admin/matches/${id}/finalize`,{homeScore:+hs,awayScore:+as});load();}catch(e){alert(e.response?.data?.message||'Failed');}};

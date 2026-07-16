@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import api from '../../api';
 
 const LandingPage = () => {
@@ -36,13 +37,20 @@ const LandingPage = () => {
   // Fetch data
   useEffect(() => {
     api
-      .get('/api/worldcup/matches/upcoming')
-      .then(r => setWcMatches(r.data.slice(0, 3)))
-      .catch(() => {});
-    api
-      .get('/api/worldcup/players/top-scorers')
-      .then(r => setTopScorers(r.data.slice(0, 5)))
-      .catch(() => {});
+  .get('/api/worldcup/matches/upcoming')
+  .then((r) => {
+    const data = Array.isArray(r.data) ? r.data : [];
+    setWcMatches(data.slice(0, 3));
+  })
+  .catch(() => setWcMatches([]));
+
+api
+  .get('/api/worldcup/players/top-scorers')
+  .then((r) => {
+    const data = Array.isArray(r.data) ? r.data : [];
+    setTopScorers(data.slice(0, 5));
+  })
+  .catch(() => setTopScorers([]));
   }, []);
 
   // Mouse parallax
